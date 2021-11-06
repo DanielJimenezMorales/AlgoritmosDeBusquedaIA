@@ -99,7 +99,10 @@ namespace Assets.Scripts.SampleMind
                     //Meter hijos en la lista abierta open
                     for (int i = 0; i < hijos.Length; i++)
                     {
-                        if (hijos[i] != null)
+                        if (hijos[i] == null)
+                        {
+                        }
+                        else
                         {
                             //Calcular la heuristica del nodo hijo i
                             h = CalculateHeuristic(goals[0], hijos[i]);
