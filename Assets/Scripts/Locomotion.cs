@@ -11,7 +11,8 @@ namespace Assets.Scripts
             Up,
             Down,
             Left,
-            Right, None
+            Right,
+            None
         }
 
         private CellInfo end;
