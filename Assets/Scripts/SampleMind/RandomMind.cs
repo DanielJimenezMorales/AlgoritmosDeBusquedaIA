@@ -20,7 +20,7 @@ namespace Assets.Scripts.SampleMind
                 return currentPlan.Pop();
 
             // calcular camino, devuelve resultado de A*
-            Nodo searchResult = Search(boardInfo, currentPos, goals);
+            Nodo searchResult = SearchOnline(boardInfo, currentPos, goals);
 
             // recorre searchResult and copia el camino a currentPlan
             while (searchResult.getNodoPadre() != null)
@@ -48,6 +48,73 @@ namespace Assets.Scripts.SampleMind
             if (targetPosition.y > curentPosPosition.y) { return Locomotion.MoveDirection.Up; }
 
             return Locomotion.MoveDirection.None;
+        }
+
+        private Nodo SearchOnline(BoardInfo board, CellInfo start, CellInfo[] goals)
+        {
+            // crea una lista vacía de nodos
+            List<Nodo> open = new List<Nodo>();
+
+            // node inicial
+            // la g(n) en el inicial es 0 pero en los demás es 1, la h*(n) la resta de x e y del objetivo hasta la pos aactual y sumas ambas.
+            CellInfo[] hijos = null;
+            int h = 0;
+            Nodo nodoStart = new Nodo(null, h, start);
+
+            // añade nodo inicial a la lista
+            open.Add(nodoStart);
+
+            // Sacar el primer nodo de la lista
+            Nodo primerNodo = open[0];
+            open.RemoveAt(0);
+
+            // si el primer nodo es goal, returns current node
+            if (primerNodo.getInfo().RowId == goals[0].RowId && primerNodo.getInfo().ColumnId == goals[0].ColumnId)
+            {
+                return primerNodo;
+            }
+
+            else
+            {
+                // expande vecinos del primer nodo de la lista abierta(calcula coste de cada uno, etc)y los añade en la lista
+                //Vaciar hijos de nodos expandidos anteriormente
+                if (hijos != null)
+                {
+                    for (int i = 0; i < hijos.Length; i++)
+                    {
+                        hijos[i] = null;
+                    }
+                    hijos = null;
+                }
+            }
+
+            //Averiguar los hijos del nodo a expandir
+            hijos = primerNodo.getInfo().WalkableNeighbours(board);
+
+            //Meter hijos en la lista abierta open
+            for (int i = 0; i < hijos.Length; i++)
+            {
+                if (hijos[i] == null)
+                {
+                }
+                else
+                {
+                    //Calcular la heuristica del nodo hijo i
+                    h = CalculateHeuristic(goals[0], hijos[i]);
+
+                    //Creamos el nodo hijo i y lo añadimos a la lista abierta
+                    Nodo hijoNodo = new Nodo(primerNodo, h, hijos[i]);
+                    open.Add(hijoNodo);
+                }
+            }
+
+            // ordena lista
+            open.Sort(delegate (Nodo a, Nodo b)
+            {
+                return a.getfEstrella().CompareTo(b.getfEstrella());
+            });
+
+            return open[0];
         }
 
         private Nodo Search(BoardInfo board, CellInfo start, CellInfo[] goals)
