@@ -19,9 +19,13 @@ namespace Assets.Scripts.SampleMind
             if (currentPlan.Count != 0)
                 return currentPlan.Pop();
 
+            Debug.Log("No he encontrado la solución");
             // calcular camino, devuelve resultado de A*
-            Nodo searchResult = SearchOnline(boardInfo, currentPos, goals);
-
+            Nodo searchResult = Search(boardInfo, currentPos, goals);
+            if (searchResult == null)
+            {
+                Debug.Log("Nodo nulo");
+            }
             // recorre searchResult and copia el camino a currentPlan
             while (searchResult.getNodoPadre() != null)
             {
@@ -59,7 +63,7 @@ namespace Assets.Scripts.SampleMind
             // la g(n) en el inicial es 0 pero en los demás es 1, la h*(n) la resta de x e y del objetivo hasta la pos aactual y sumas ambas.
             CellInfo[] hijos = null;
             int h = 0;
-            Nodo nodoStart = new Nodo(null, h, start);
+            Nodo nodoStart = new Nodo(null, h, start, 0, h);
 
             // añade nodo inicial a la lista
             open.Add(nodoStart);
@@ -103,8 +107,8 @@ namespace Assets.Scripts.SampleMind
                     h = CalculateHeuristic(goals[0], hijos[i]);
 
                     //Creamos el nodo hijo i y lo añadimos a la lista abierta
-                    Nodo hijoNodo = new Nodo(primerNodo, h, hijos[i]);
-                    open.Add(hijoNodo);
+                    //Nodo hijoNodo = new Nodo(primerNodo, h, hijos[i]);
+                    //open.Add(hijoNodo);
                 }
             }
 
@@ -124,58 +128,55 @@ namespace Assets.Scripts.SampleMind
 
             // node inicial
             // la g(n) en el inicial es 0 pero en los demás es 1, la h*(n) la resta de x e y del objetivo hasta la pos aactual y sumas ambas.
-            CellInfo[] hijos = null;
             int g = 0;
             int h = 0;
-            Nodo nodoStart = new Nodo(null, g + h, start);
+            Nodo nodoStart = new Nodo(null, g + h, start, g, h);
 
             // añade nodo inicial a la lista
             open.Add(nodoStart);
 
+            int k = 0;
             // mientras la lista no esté vacia
-            while (open.Count != 0)
+            while (open.Count != 0 && k < 100)
             {
+                //Debug.Log(open.Count);
                 // Sacar el primer nodo de la lista
                 Nodo primerNodo = open[0];
                 open.RemoveAt(0);
+                Debug.Log("Paso por " + primerNodo.getInfo().RowId + ", " + primerNodo.getInfo().ColumnId + " | f = " + primerNodo.getfEstrella() + " | g = " + primerNodo.g + " | h = " + primerNodo.h);
 
                 // si el primer nodo es goal, returns current node
                 if (primerNodo.getInfo().RowId == goals[0].RowId && primerNodo.getInfo().ColumnId == goals[0].ColumnId)
                 {
+                    Debug.Log("Encontradoooooo");
                     return primerNodo;
                 }
                 else
                 {
                     // expande vecinos del primer nodo de la lista aierta(calcula coste de cada uno, etc)y los añade en la lista
                     //Vaciar hijos de nodos expandidos anteriormente
-                    if (hijos != null)
-                    {
-                        for (int i = 0; i < hijos.Length; i++)
-                        {
-                            hijos[i] = null;
-                        }
-                        hijos = null;
-                    }
                     
                     //Averiguar los hijos del nodo a expandir
-                    hijos = primerNodo.getInfo().WalkableNeighbours(board);
+                    CellInfo[] mishijos = primerNodo.getInfo().WalkableNeighbours(board);
 
                     //Se aumenta la g en 1 (Ya que el coste entre dos casillas siempre es 1)
                     g++;
 
                     //Meter hijos en la lista abierta open
-                    for (int i = 0; i < hijos.Length; i++)
+                    for (int i = 0; i < mishijos.Length; i++)
                     {
-                        if (hijos[i] == null)
+                        if (mishijos[i] == null)
                         {
+                            Debug.Log("dddddd");
                         }
                         else
                         {
+                            Debug.Log("a");
                             //Calcular la heuristica del nodo hijo i
-                            h = CalculateHeuristic(goals[0], hijos[i]);
+                            h = CalculateHeuristic(goals[0], mishijos[i]);
 
                             //Creamos el nodo hijo i y lo añadimos a la lista abierta
-                            Nodo hijoNodo = new Nodo(primerNodo, g + h, hijos[i]);
+                            Nodo hijoNodo = new Nodo(primerNodo, g + h, mishijos[i], g, h);
                             open.Add(hijoNodo);
                         }
                     }
@@ -186,6 +187,7 @@ namespace Assets.Scripts.SampleMind
                         return a.getfEstrella().CompareTo(b.getfEstrella());
                     });
                 }
+                k++;
             }
             return null;
         }
@@ -193,7 +195,7 @@ namespace Assets.Scripts.SampleMind
         private int CalculateHeuristic(CellInfo goal, CellInfo currentNode)
         {
             Vector2 goalPosition = new Vector2(goal.ColumnId, goal.RowId);
-            Vector2 currentNodePosition = new Vector2(currentNode.ColumnId, currentNode.RowId);int d = (int)Mathf.Abs(goalPosition.x - currentNodePosition.x) + (int)Mathf.Abs(goalPosition.y - currentNodePosition.y);
+            Vector2 currentNodePosition = new Vector2(currentNode.ColumnId, currentNode.RowId);
             return (int)Mathf.Abs(goalPosition.x - currentNodePosition.x) + (int)Mathf.Abs(goalPosition.y - currentNodePosition.y);
         }
     }
