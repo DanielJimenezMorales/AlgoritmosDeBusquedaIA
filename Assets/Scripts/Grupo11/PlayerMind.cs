@@ -76,7 +76,5 @@ namespace Assets.Scripts.SampleMind
 
             return Locomotion.MoveDirection.None;
         }
-
-
     }
 }
