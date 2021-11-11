@@ -191,6 +191,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d675d341035b31048ad08efeb9847b88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
+--- !u!114 &629658572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 629658569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82452a95651c46c448f9d05d6cef88bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &629658573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 629658569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c1d93c142fd5a847924c618f5ecb274, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &760955683
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,8 +400,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 198952, guid: 1f54754c41c64a04aac6945bc71af6ca, type: 3}
   Planner: 0
-  seed: 21
-  numEnemies: 0
+  seed: 148
+  numEnemies: 5
 --- !u!4 &1401979017
 Transform:
   m_ObjectHideFlags: 0
