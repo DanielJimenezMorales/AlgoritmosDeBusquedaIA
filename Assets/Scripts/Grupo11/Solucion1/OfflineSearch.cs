@@ -7,10 +7,9 @@ public class OfflineSearch : MonoBehaviour
 {
     public Nodo Search(BoardInfo board, CellInfo start, CellInfo[] goals)
     {
-
         // Inicializamos parámetros necesarios.
         List<Nodo> open = new List<Nodo>();                             //Lista abierta
-        List<Vector2> previousPositionsList = new List<Vector2>();      //Lista de estados no repetidos
+        List<Vector2> previousPositionsList = new List<Vector2>();      //Lista de estados repetidos
 
         int g = 0;                                                      //g(n)
         int h = 0;                                                      //h(n)

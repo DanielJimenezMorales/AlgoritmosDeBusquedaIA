@@ -9,6 +9,7 @@ namespace Assets.Scripts.SampleMind
         OnlineSearch = 0,
         OfflineSearch = 1
     }
+
     public class PlayerMind : AbstractPathMind
     {
         private Stack<Locomotion.MoveDirection> currentPlan = new Stack<Locomotion.MoveDirection>();
@@ -50,7 +51,6 @@ namespace Assets.Scripts.SampleMind
             // recorre searchResult and copia el camino a currentPlan
             while (searchResult.getNodoPadre() != null)
             {
-                //currentPlan.Push(searchResult.ProducedBy);
                 currentPlan.Push(CalculateMovement(searchResult.getInfo(), searchResult.getNodoPadre().getInfo()));
                 searchResult = searchResult.getNodoPadre();
             }
